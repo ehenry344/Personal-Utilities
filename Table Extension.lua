@@ -1,103 +1,70 @@
--- // gilaga4815 // -- 
-
--- Module created with the help of many programming articles and devforum documentation with useful methods
-
 --[[
-	This module serves as an extension for existing table functions to be able to clean up some functions that are reused
+
+        _ _                   _  _    ___  _ ____  
+   __ _(_) | __ _  __ _  __ _| || |  ( _ )/ | ___| 
+  / _` | | |/ _` |/ _` |/ _` | || |_ / _ \| |___ \ 
+ | (_| | | | (_| | (_| | (_| |__   _| (_) | |___) |
+  \__, |_|_|\__,_|\__, |\__,_|  |_|  \___/|_|____/ 
+  |___/           |___/    
+
+
+Table Utility Module 
+
+Last Update : 12 / 16 / 2021 
+
+Module Description : 
+
+- Provides added functionality for things that are missing from the important lua table library 
+- Some of the functions within this module are sourced from many different places, so authors are credited in the function reference
 ]]
 
---------------------------------------------------------------------------------------------------------------------------------------------
+--[[
+TableExtension Function Documentation : 
 
--- parameters of the dictionaryCompare method (Found on the Developer Forums (Credits : goldenstein64)) 
+1. dictionaryCompare(table: dictionary1, table: dictionary2) (Credits : goldenstein64)
+	-- accepts two different tables / dictionaries and checks if their complementing keys are equal 
+	-- return : true if their comparisons fulfill, false otherwise 
+	
+2. deepCopy(table: tab) (Credits : IgnisRBX)
+	- creates a copy of a table with embeded tables 
+	- return : the deepcopied table 
+	
+3. shallowCopy(table: tab) (Credits : IgnisRBX)
+	-- creates a copy of a 1d table 
+	-- return : the shallowcopied table 
 
--- dict1 : the dictionary you want to compare against t1
--- dict2 : the dictionary you want to compare against t2
+4. clear(table: tab) (Credits : gilaga4815)
+	-- sets all elements of the table to nil, effectively clearing the data 
+	-- return : nil 
 
--- Basically what the method does is it checks if any parameter in t2 is different than any parameter in t1
+5. getPrecedence(table: tab, number: current) : (Credits : gilaga4815)
+	-- acts as a cyclic table indexer, meaning if the current number is the last element in the table it will return the 
+	-- first element of the table, otherwise it returns the next one, prevents attempting to index an unfilled position
+	
+6. generateChunks(table: tab, number: chunkSize) (Credits : Ryan Farney dev.to)
+	-- generates a table with separate subtables, each subtable holds a maximum number of elements that is set by the chunkSize
+	-- return : the table that was chunked
+	
+7. stringifyTable(table: tab) (Credits : gilaga4815)
+	-- creates a string that represents the contents of the table
+	-- return : the string as stated above 
+	
+8. reverse(table: tab) (Credits : sleitnick)
+	-- creates a shallowcopied version of the table and reverses the order of the elements in each numerical position
+	-- return : shallowCopied table that holds reversed data from input
 
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the deepCopy method : (Found on developer hub (Credits : IgnisRBX @ DevRel))
-
--- tab is just the table you want deepcopied 
-
--- Basically this method just does is copies the table but it also copies every key in the table for embedded tables and whatnot
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the shallowCopy method : (Found on developer hub (Credits : IgnisRBX @ DevRel))
-
--- tab is just the table you want shallowcopied
-
--- Basically this method just does is it copies the table, however it may not copy embedded tables 
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the clear method : (Credits : gilaga4815)
-
--- tab is just the table you want to be cleared
-
--- Basically this method just clears every index in the table pretty self explanatory
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the getPrecedence method : (Credits : gilaga4815)
-
--- tab is just the table you want to get the next index of
-
--- Basically this method just goes through the table and tells you the next index, if that index is at the end of the table than it 
--- just returns back to the 1st index
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the generateChunks method : (Credits : Ryan Farney dev.to)
-
--- tab is just the table you want to create chunks from
-
--- Basically this method iterates / steps through all of the elements in the table 
--- as it steps through all of the elements in the table it checks if there is no subtable in the chunked table or that the length
--- of the table at the last indice is the same as the size of the chunks a user wants
--- if so than a new table is added to the end and if it's not the same size as elements are added than elements are just added to it
--- without adding a new subtable to the chunked table
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the stringifyTable method : (Credits : gilaga4815)
-
--- tab is just the table of the elements you want to format into a string
-
--- basically this method outputs a stringified version of all of the elements in the table in order, descending
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the stringifyTable method : (Algorithim Idea Credits : sleitneck (aka crazyman32, Sleitneck on devforums)
-
--- tab is just the table in which you want reversed
-
--- basically this method reverses the elements in a table, so the ones at the end of the table will not be at the front of the table
--- and the elements at the front of the table are now at the end of the table
-
--- Warning : It returns a shallowcopy and doesn't actually update the table you are inputting it, just returns a shallowcopy.
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the concatTable method : (Credits gilaga4815)
-
--- The (...) is just a variable number of arguments, stating the data being passed in (i.e. tables)
-
--- basically this function simply concatenates or appends the data from one table onto another and returns it
-
---------------------------------------------------------------------------------------------------------------------------------------------
-
--- Parameters of the concatNTable method : (Credits gilaga4815)
-
--- the (...) or variable number of arguments are just add'l arguments that can be passed 
-
--- This function simply concatenates all of the tabular data provided into one big table, and returns it 
-
--- Warning : This method is costly for that of a utility function, so use sparingly
-
---------------------------------------------------------------------------------------------------------------------------------------------
+8. concatTable(table: ...) (Credits : gilaga4815)
+	-- accepts as many tables as allowed as input, concatenats them all together into one big table
+	-- return : table with all concatenated data from other tables (Warning : This is a shallow concatenation)
+	
+9. flatten(table: tab) (Credits : gilaga4815)
+	-- flattens (compresses subtables into one table) the contents of a table with potential subtables into a single table 
+	-- returns the table with the unpacked data (Warning: this is a new table)
+	
+10. deepConcat(table: ...) (Credits : gilaga4815) 
+	-- works similarily to that of concatTable, however this function can also concatenate tables with embedded tables, so everything gets added 
+	-- return : the deep concatenated table 
+]]
 
 local tableModule = {}
 
@@ -183,7 +150,6 @@ tableModule.reverse = function(tab)
 	return copiedTable
 end
 
--- Added 12 / 2 / 2021 
 tableModule.concatTable = function(...)
 	local newTab = {}
 	
@@ -196,16 +162,24 @@ tableModule.concatTable = function(...)
 	return newTab 
 end
 
-local function unwrapTable(tab) -- used within the method below 
-	if type(tab[1]) == "table" then
-		return unwrapTable(tab[1])
+tableModule.flatten = function(tab) 
+	local newTable = {} 
+	
+	local function unpackSub(privateT)
+		for i = 1, #privateT do
+			if type(privateT[i]) == "table" then
+				unpackSub(privateT[i])
+			else
+				table.insert(newTable, privateT[i])
+			end
+		end
 	end
 	
-	return tab 
+	unpackSub(tab)	
+	return newTable 
 end
 
--- Added 12 / 2 / 2021 
-tableModule.concatNTable = function(...)		
+tableModule.deepConcat = function(...)		
 	local newTab = {} 
 	
 	for _, extraData in pairs({...}) do 
@@ -213,10 +187,10 @@ tableModule.concatNTable = function(...)
 			if type(tableContents) ~= "table" then
 				newTab[#newTab + 1] = tableContents
 			else 
-				newTab = tableModule.concatNTable(
+				newTab = tableModule.deepConcat(
 					newTab, 
-					unwrapTable(tableContents)
-				)
+					tableModule.unpack(tableContents)
+				) 
 			end
 		end
 	end
