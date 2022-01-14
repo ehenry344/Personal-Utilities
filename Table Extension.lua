@@ -189,7 +189,7 @@ tableModule.deepConcat = function(...)
 			else 
 				newTab = tableModule.deepConcat(
 					newTab, 
-					tableModule.unpack(tableContents)
+					tableModule.flatten(tableContents)
 				) 
 			end
 		end
